@@ -3,37 +3,39 @@ import 'package:flutter/cupertino.dart';
 import 'package:simakan/core/constant/api.dart';
 import 'package:simakan/core/helper/dio_exception.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simakan/core/model/angket_model.dart';
+import 'package:simakan/core/model/user_model.dart';
 
-class AuthRepository extends ChangeNotifier {
+class AngketRepository extends ChangeNotifier {
   Response? response;
   Dio dio = new Dio();
 
-  Future<bool> login(String nis, String password, BuildContext context) async {
+  Future<List<AngketModel>> getAngket(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      response = await dio.post(Api().login,
+      response = await dio.post(Api().angket,
           options: Options(
               headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
               }),
           data: {
-            'nis': nis,
-            'password': password
+            'siswa_id': prefs.getInt('siswa_id')
           }).timeout(Duration(seconds: Api().timeout));
       if (response!.data['isSuccess'] == true) {
-        prefs.setBool('is_login', true);
-        prefs.setInt('siswa_id', response!.data['data']['siswa_id']);
-        return true;
+        notifyListeners();
+        Iterable data = response!.data['data'];
+        List<AngketModel> listData = data.map((map) => AngketModel.fromJson(map)).toList();
+        return listData;
       } else {
         print(response!.data['status']);
         prefs.setString('message', response!.data['message']);
-        return false;
+        return [];
       }
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
-      prefs.setString('message', errorMessage);
-      return false;
+      prefs.setString('error', errorMessage);
+      return [];
     }
   }
 }

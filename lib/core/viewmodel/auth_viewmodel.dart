@@ -9,7 +9,7 @@ class AuthViewModel extends BaseViewModel {
   final AuthRepository _authRepository = locator<AuthRepository>();
 
   Future<bool> login({
-    String? user,
+    String? nis,
     String? password,
     required Function() onSuccess,
     required Function(String) onError,
@@ -17,7 +17,7 @@ class AuthViewModel extends BaseViewModel {
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(ViewState.Busy);
-    var request = await _authRepository.login(user!, password!, context);
+    var request = await _authRepository.login(nis!, password!, context);
     setState(ViewState.Idle);
     if (request) {
       return onSuccess();
