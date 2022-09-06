@@ -5,4 +5,5 @@ class Api {
   String login = endpoint + "login";
   String user = endpoint + "user";
   String angket = endpoint + "angket";
+  String question = endpoint + "question";
 }

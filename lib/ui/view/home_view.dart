@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:simakan/core/constant/viewstate.dart';
 import 'package:simakan/core/viewmodel/home_viewmodel.dart';
 import 'package:simakan/ui/base_view.dart';
+import 'package:simakan/ui/view/rule_view.dart';
 import 'package:simakan/ui/widget/modal_progress.dart';
 import 'package:toast/toast.dart';
 
@@ -130,7 +131,9 @@ class _HomeViewState extends State<HomeView> {
                                   if(data.angket![index].status != "OK") {
                                     Toast.show(data.angket![index].status, context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                                   } else {
-
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => RuleView(
+                                      angketId: data.angket![index].angketId,
+                                    )));
                                   }
                                 },
                                 child: Container(

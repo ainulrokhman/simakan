@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:simakan/core/constant/viewstate.dart';
 import 'package:simakan/core/model/angket_model.dart';
+import 'package:simakan/core/model/question_model.dart';
 import 'package:simakan/core/model/user_model.dart';
 import 'package:simakan/core/repository/angket_repository.dart';
 import 'package:simakan/core/repository/auth_repository.dart';
@@ -13,11 +14,20 @@ class AngketViewModel extends BaseViewModel {
   final AngketRepository _angketRepository = locator<AngketRepository>();
 
   List<AngketModel>? angket;
+  List<QuestionModel>? question;
 
   Future getAngket(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(ViewState.Busy);
     angket = await _angketRepository.getAngket(context);
+    notifyListeners();
+    setState(ViewState.Idle);
+  }
+
+  Future getQuestion(int angketId, BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(ViewState.Busy);
+    question = await _angketRepository.getQuestion(angketId, context);
     notifyListeners();
     setState(ViewState.Idle);
   }
