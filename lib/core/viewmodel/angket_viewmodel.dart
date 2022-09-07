@@ -31,4 +31,45 @@ class AngketViewModel extends BaseViewModel {
     notifyListeners();
     setState(ViewState.Idle);
   }
+
+  Future<bool> doing({
+    required int? angketId,
+    required int? isDoing,
+    required Function() onSuccess,
+    required Function(String) onError,
+    required BuildContext context
+  }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(ViewState.Busy);
+    var request = await _angketRepository.doing(angketId!, isDoing!, context);
+    setState(ViewState.Idle);
+    if (request) {
+      return onSuccess();
+    } else {
+      onError(prefs.getString('message')!);
+      setState(ViewState.Idle);
+      return false;
+    }
+  }
+
+  Future<bool> answerQuestion({
+    int? angketId,
+    int? questionId,
+    String? value,
+    required Function() onSuccess,
+    required Function(String) onError,
+    required BuildContext context
+  }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(ViewState.Busy);
+    var request = await _angketRepository.answerQuestion(angketId!, questionId!, value!, context);
+    setState(ViewState.Idle);
+    if (request) {
+      return onSuccess();
+    } else {
+      onError(prefs.getString('message')!);
+      setState(ViewState.Idle);
+      return false;
+    }
+  }
 }

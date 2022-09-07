@@ -79,9 +79,20 @@ class _RuleViewState extends State<RuleView> {
                       borderRadius: BorderRadius.circular(30),
                       child: MaterialButton(
                         onPressed: () async {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => QuestionView(
+                          await data.doing(
                             angketId: widget.angketId,
-                          )));
+                            isDoing: 1,
+                            onSuccess: () {
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => QuestionView(
+                                angketId: widget.angketId,
+                                indexed: 0,
+                              )));
+                            },
+                            onError: (error) {
+                              Toast.show(error, context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                            },
+                            context: context
+                          );
                         },
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         color: Colors.deepPurple,

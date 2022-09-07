@@ -68,4 +68,66 @@ class AngketRepository extends ChangeNotifier {
       return [];
     }
   }
+
+  Future<bool> doing(int angketId, int isDoing, BuildContext context) async {
+    print("masuk sini");
+    print(angketId);
+    print(isDoing);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      response = await dio.post(Api().doing,
+          options: Options(
+              headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+              }),
+          data: {
+            'angket_id': angketId,
+            'siswa_id': prefs.getInt('siswa_id'),
+            'is_doing': isDoing
+          }).timeout(Duration(seconds: Api().timeout));
+      print(response!.data['isSuccess']);
+      if (response!.data['isSuccess'] == true) {
+        return true;
+      } else {
+        print(response!.data['status']);
+        prefs.setString('message', response!.data['message']);
+        return false;
+      }
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      prefs.setString('message', errorMessage);
+      return false;
+    }
+  }
+
+  Future<bool> answerQuestion(int angketId, int questionId, String value, BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      response = await dio.post(Api().answer,
+          options: Options(
+              headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+              }),
+          data: {
+            'angket_id': angketId,
+            'siswa_id': prefs.getInt('siswa_id'),
+            'question_id': questionId,
+            'answer_value': value
+          }).timeout(Duration(seconds: Api().timeout));
+      print(response!.data['isSuccess']);
+      if (response!.data['isSuccess'] == true) {
+        return true;
+      } else {
+        print(response!.data['status']);
+        prefs.setString('message', response!.data['message']);
+        return false;
+      }
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      prefs.setString('message', errorMessage);
+      return false;
+    }
+  }
 }
