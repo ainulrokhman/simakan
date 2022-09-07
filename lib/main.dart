@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simakan/locator.dart';
 import 'package:simakan/ui/view/login_view.dart';
+import 'package:simakan/ui/view/splashscreen_view.dart';
 
 void main() {
   setupLocator();
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginView(),
+      home: SplashScreenView(),
     );
   }
 }
