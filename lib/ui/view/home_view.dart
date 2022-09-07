@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simakan/core/constant/viewstate.dart';
+import 'package:simakan/core/viewmodel/auth_viewmodel.dart';
 import 'package:simakan/core/viewmodel/home_viewmodel.dart';
 import 'package:simakan/ui/base_view.dart';
+import 'package:simakan/ui/view/change_password_view.dart';
+import 'package:simakan/ui/view/edit_profile_view.dart';
 import 'package:simakan/ui/view/history_view.dart';
+import 'package:simakan/ui/view/login_view.dart';
 import 'package:simakan/ui/view/rule_view.dart';
 import 'package:simakan/ui/widget/modal_progress.dart';
 import 'package:toast/toast.dart';
@@ -24,7 +28,9 @@ class _HomeViewState extends State<HomeView> {
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              dialogLogout(context);
+            },
             icon: Icon(
               Icons.logout,
               color: Colors.white,
@@ -70,7 +76,7 @@ class _HomeViewState extends State<HomeView> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(50),
                                     child: InkWell(
-                                      onTap: () => showModalProfile(context),
+                                      onTap: () => showModalProfile(data, context),
                                       child: Container(
                                         child: Image.network("${data.user!.siswaImages}", width: 50, height: 50, fit: BoxFit.cover,),
                                       ),
@@ -173,6 +179,7 @@ class _HomeViewState extends State<HomeView> {
                                             angketId: data.angket![index].angketId,
                                           ))).then((value) async {
                                             await data.getAngket(context);
+                                            await data.getUser(context);
                                           });
                                         }
                                       }
@@ -229,64 +236,102 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
-  
-  showModalProfile(BuildContext context){
+
+  showModalProfile(HomeViewModel data, BuildContext context) {
     return showModalBottomSheet(
-      context: context,
-      //isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30)
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(30),
+          ),
         ),
-      ),
-      builder: (context) {
-        return Container(
-          width: double.infinity,
-          height: 180,
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Center(
-                child: Container(
-                  width: 50,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey[300]!
-                  ),
-                ),
-              ),
-              SizedBox(height: 20,),
-              InkWell(
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.account_circle,
-                      color: Colors.deepPurple,
+        builder: (BuildContext bc){
+          return SafeArea(
+              child: Container(
+                padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                child: Wrap(
+                  children: <Widget>[
+                    ListTile(
+                        leading: Icon(Icons.account_circle, color: Colors.deepPurple,),
+                        title: Text('Edit Profil', style: TextStyle(fontSize: 12),),
+                        onTap: () async {
+                          Navigator.pop(context);
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditProfileView())).then((value) async {
+                            await data.getAngket(context);
+                            await data.getUser(context);
+                          });
+                        }
                     ),
-                    SizedBox(width: 10,),
-                    Text("Edit Profil")
-                  ],
-                ),
-              ),
-              SizedBox(height: 20,),
-              InkWell(
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.lock,
-                      color: Colors.deepPurple,
+                    ListTile(
+                      leading: Icon(Icons.lock, color: Colors.deepPurple),
+                      title: Text('Ganti Kata Sandi', style: TextStyle(fontSize: 12),),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChangePasswordView())).then((value) async {
+                          await data.getAngket(context);
+                          await data.getUser(context);
+                        });
+                      },
                     ),
-                    SizedBox(width: 10,),
-                    Text("Ganti Kata Sandi")
                   ],
                 ),
               )
-            ],
+          );
+        }
+    );
+  }
+
+  dialogLogout(BuildContext context){
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)
+        ),
+        title: new Text(
+          'Keluar Akun',
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.bold
           ),
-        );
-      }
+        ),
+        content: new Text(
+          'Apakah Anda yakin ingin keluar?',
+          style: TextStyle(
+              color: Colors.grey
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+            },
+            child: new Text(
+              'Batalkan',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () async {
+              await AuthViewModel().logout();
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginView()));
+            },
+            child: new Text(
+              'Yakin',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

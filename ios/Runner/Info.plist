@@ -43,5 +43,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<!-- IMAGE PICKER START HERE -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app requires to access your photo library to show image on profile and update image profile</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Camera usage description</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Need microphone access for uploading videos</string>
+    <!-- IMAGE PICKER END HERE -->
 </dict>
 </plist>

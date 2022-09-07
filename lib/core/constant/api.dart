@@ -8,4 +8,7 @@ class Api {
   String question = endpoint + "question";
   String doing = endpoint + "doing";
   String answer = endpoint + "answer";
+  String changePassword = endpoint + "changepassword";
+  String changePhoto = endpoint + "changephoto";
+  String updateprofile = endpoint + "updateprofile";
 }

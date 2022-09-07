@@ -219,7 +219,7 @@ class _QuestionViewState extends State<QuestionView> {
                   isDoing: 2,
                   onSuccess: () {
                     Navigator.pop(context);
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SuccessView()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SuccessView(message: "Anda Berhasil mengerjakan Angket",)));
                   },
                   onError: (error) {
                     Toast.show(error, context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);

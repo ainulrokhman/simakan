@@ -9,6 +9,9 @@ import 'package:simakan/ui/widget/modal_progress.dart';
 import 'package:toast/toast.dart';
 
 class SuccessView extends StatefulWidget {
+  String? message;
+
+  SuccessView({required this.message});
 
   @override
   _SuccessViewState createState() => _SuccessViewState();
@@ -37,7 +40,7 @@ class _SuccessViewState extends State<SuccessView> {
             ),
             SizedBox(height: 10,),
             Text(
-              "Anda Berhasil mengerjakan Angket",
+              "${widget.message}",
             ),
             SizedBox(height: 50,),
             Container(

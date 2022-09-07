@@ -54,11 +54,11 @@ class _HistoryViewState extends State<HistoryView> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => RuleView(
-                                  angketId: angket![index].angketId,
-                                ))).then((value) async {
-                                  await data.getAngket(context);
-                                });
+                                // Navigator.of(context).push(MaterialPageRoute(builder: (context) => RuleView(
+                                //   angketId: angket![index].angketId,
+                                // ))).then((value) async {
+                                //   await data.getAngket(context);
+                                // });
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
