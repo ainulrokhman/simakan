@@ -1,5 +1,5 @@
 class Api {
-  static const endpoint = "http://192.168.100.2:8080/simakan/api/";
+  static const endpoint = "http://192.168.68.249:8080/simakan/api/";
   final timeout = 20;
 
   String login = endpoint + "login";

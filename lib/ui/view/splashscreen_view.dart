@@ -23,9 +23,9 @@ class _SplashScreenViewState extends State<SplashScreenView> {
     return Timer(duration, () async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
         if(prefs.getBool('is_login') == true) {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeView()));
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeView()));
         } else {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginView()));
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginView()));
         }
     });
   }
